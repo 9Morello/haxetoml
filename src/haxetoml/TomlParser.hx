@@ -26,7 +26,7 @@ class TomlParser {
 	var	root : Dynamic;
 	var pos = 0;
 
-	public var currentToken(get_currentToken, null) : Token;
+	public var currentToken(get, null):Token;
 
 	/** Set up a new TomlParser instance */
 	public function new() {}
