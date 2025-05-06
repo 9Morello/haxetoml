@@ -1,6 +1,5 @@
 package haxetoml;
 
-using haxe.Utf8;
 using Lambda;
 
 private enum TokenType {
@@ -237,24 +236,24 @@ class TomlParser {
 		return decode(token, TokenType.TkKey, function(v) { return v; });
 	}
 
-	function unescape(str : String) {
+	function unescape(str:UnicodeString) {
 		var pos = 0;
-		var buf = new haxe.Utf8();
+		var buf = new StringBuf();
 
-		var len = Utf8.length(str);
-		while(pos < len) {
-			var c = Utf8.charCodeAt(str, pos);
+		var len = str.length;
+		while (pos < len) {
+			var c = str.charCodeAt(pos);
 
 			// strip first and last quotation marks
-			if ((pos == 0 || pos == len-1) && c == "\"".code) {
+			if ((pos == 0 || pos == len - 1) && c == "\"".code) {
 				pos++;
 				continue;
 			}
 
 			pos++;
 
-			if(c == "\\".code) {
-				c = Utf8.charCodeAt(str, pos);
+			if (c == "\\".code) {
+				c = str.charCodeAt(pos);
 				pos++;
 
 				switch(c) {
@@ -265,7 +264,7 @@ class TomlParser {
 					case "f".code: buf.addChar(12);
 					case "/".code, "\\".code, "\"".code: buf.addChar(c);
 					case "u".code:
-						var uc = Std.parseInt("0x" + Utf8.sub(str, pos, 4));
+						var uc = Std.parseInt("0x" + str.substr(pos, 4));
 						buf.addChar(uc);
 						pos += 4;
 					default:
